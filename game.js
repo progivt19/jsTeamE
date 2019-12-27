@@ -30,15 +30,9 @@ document.addEventListener('keydown', function (event) {
 document.addEventListener('keydown', function (event) {
   if (event.code==='KeyS') {yPos+=80;}});
 var pipe = [];
-//var gap = 140;
-//var xPos2 = 600;
-//var yPos2 = 240;
-//var grav = 2;
 var xPos = 711;
 var yPos = 600;
-var k;
-//while(mn)
-//var start = false;
+var time1=0;
 pipe[0] = {
   x : 0,
   y : 0
@@ -52,11 +46,15 @@ function draw(){
 ctx.drawImage(bg,0,0);
 
   for(var i = 0; i < pipe.length; i++) {
-    //рандомное появление вражеских машин
-  ctx.drawImage(bcar,pipe[i].x+rand(0,bcar.height),pipe[i].y);
- ctx.drawImage(bcarq,pipe[i].x+rand(bcar.height+1,bcar.height*2),pipe[i].y);
-  ctx.drawImage(bcarw,pipe[i].x+rand(bcar.height*2+1,bcar.height*3),pipe[i].y);
-  ctx.drawImage(bcare,pipe[i].x+rand(500,bcar.height-bcar.width),pipe[i].y);
+    //рандомrandное появление вражеских машин
+    var u=pipe[i].x+rand(0,bcar.height);
+    var o=pipe[i].x+rand(bcar.height+1,bcar.height*2);
+    var p=pipe[i].x+rand(bcar.height*2+1,bcar.height*3);
+    var m=pipe[i].x+rand(500,bcar.height-bcar.width);
+  ctx.drawImage(bcar,u,pipe[i].y);
+ ctx.drawImage(bcarq,o,pipe[i].y);
+  ctx.drawImage(bcarw,p,pipe[i].y);
+  ctx.drawImage(bcare,m,pipe[i].y);
   pipe[i].y+=4;
 if (pipe[i].y%800==0)
 pipe.push({
@@ -64,14 +62,17 @@ pipe.push({
   y:0-bcar.height
 });
  //конец игры, если машинка ударяется об припятсвие
- if ((xPos<=0 || xPos+car.width>=cvs.width || yPos<=0 || yPos+car.height>=cvs.height)||(xPos+car.width<=pipe[i].x ||  xPos+car.width<=pipe[i].x+bcarq.width)) {
- //||(xPos+car.width<=pipe[i].x || xPos<=pipe[i].x+bcar.width)) ||(xPos<=pipe[i].x-bcarq.width && yPos>=pipe[i].y-bcarq.height)) {
-  location.reload();}}
+ if ((xPos<=0 || xPos+car.width>=cvs.width || yPos<=0 || yPos+car.height>=cvs.height)
+ ||(xPos-car.width<=u)&&(xPos+car.width>=u)&&(yPos-bcar.height<=pipe[i].y)&&(yPos+bcar.height>=pipe[i].y)
+ ||(xPos-car.width<=o)&&(xPos+car.width>=o)&&(yPos-bcar.height<=pipe[i].y)&&(yPos+bcar.height>=pipe[i].y)
+ ||(xPos-car.width<=p)&&(xPos+car.width>=p)&&(yPos-bcar.height<=pipe[i].y)&&(yPos+bcar.height>=pipe[i].y)
+  ||(xPos-car.width<=m)&&(xPos+car.width>=m)&&(yPos-bcar.height<=pipe[i].y)&&(yPos+bcar.height>=pipe[i].y))
+ {location.reload();}}
  ctx.drawImage(car,xPos,yPos);
- ctx.font = "80px Verdana";
- ctx.fillText("Время выживания: "+(Math.floor((time+=1.7)/100*100)/100),0,1000);
+ ctx.font = "72px Verdana";
+  time1 = time1+Math.floor((time+=1.7)/100*100)/100;
+ ctx.fillText("Время выживания: "+Math.floor((time+=1.7)/100*100)/100,0,1000);
   requestAnimationFrame(draw);
 }
-var cc=document.getElementById("timer");
-cc.innerHTML=time;
+
 bcar.onload = draw;}
