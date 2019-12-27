@@ -45,7 +45,7 @@ pipe[0] = {
 };
 //рандом координат
 function rand(min,max){
-  return Math.random()+max+ min ;
+  return Math.random() + max + min ;
 }
 //рисовка всех объектов
 function draw(){
@@ -53,22 +53,25 @@ ctx.drawImage(bg,0,0);
 
   for(var i = 0; i < pipe.length; i++) {
     //рандомное появление вражеских машин
-  ctx.drawImage(bcar,pipe[i].x+Math.random()+rand(0,100),pipe[i].y);
-  ctx.drawImage(bcarq,pipe[i].x+rand(0,cvs.width-1300),pipe[i].y);
-  ctx.drawImage(bcarw,pipe[i].x+rand(0,cvs.width-500),pipe[i].y);
-  ctx.drawImage(bcare,pipe[i].x+rand(0,cvs.width-770),pipe[i].y);
-  pipe[i].y+=3;
-if (pipe[i].y == 600)
-{pipe.push({
-  x:0,
-  y:0
-});}
+  ctx.drawImage(bcar,pipe[i].x+rand(0,bcar.height),pipe[i].y);
+ ctx.drawImage(bcarq,pipe[i].x+rand(bcar.height+1,bcar.height*2),pipe[i].y);
+  ctx.drawImage(bcarw,pipe[i].x+rand(bcar.height*2+1,bcar.height*3),pipe[i].y);
+  ctx.drawImage(bcare,pipe[i].x+rand(500,bcar.height-bcar.width),pipe[i].y);
+  pipe[i].y+=4;
+if (pipe[i].y%800==0)
+pipe.push({
+  x:Math.floor(Math.random()*bcarq.width)-bcar.height,
+  y:0-bcar.height
+});
  //конец игры, если машинка ударяется об припятсвие
- if((xPos<=0 || xPos+car.width>=cvs.width || yPos<=0 || yPos+car.height>=cvs.height) ||(xPos<=pipe[i].x-bcarq.width && yPos>=pipe[i].y-bcarq.height)) {
+ if ((xPos<=0 || xPos+car.width>=cvs.width || yPos<=0 || yPos+car.height>=cvs.height)||(xPos+car.width<=pipe[i].x ||  xPos+car.width<=pipe[i].x+bcarq.width)) {
+ //||(xPos+car.width<=pipe[i].x || xPos<=pipe[i].x+bcar.width)) ||(xPos<=pipe[i].x-bcarq.width && yPos>=pipe[i].y-bcarq.height)) {
   location.reload();}}
  ctx.drawImage(car,xPos,yPos);
  ctx.font = "80px Verdana";
  ctx.fillText("Время выживания: "+(Math.floor((time+=1.7)/100*100)/100),0,1000);
   requestAnimationFrame(draw);
 }
+var cc=document.getElementById("timer");
+cc.innerHTML=time;
 bcar.onload = draw;}
